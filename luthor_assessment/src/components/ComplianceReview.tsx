@@ -13,13 +13,16 @@ const ComplianceReview = ({
   onViolationClick,
 }: ComplianceReviewProps) => {
 
-  const renderTextWIthViolations = () => {
+  const renderTextWithViolations = () => {
     let lastIndex = 0
     const elements = []
 
     violations.forEach((violation, index) => {
-      if(violation.start < lastIndex) {
-        elements.push(paragraph.slice(lastIndex, violation.start))
+      if(violation.start > lastIndex) {
+        const item = paragraph.slice(lastIndex, violation.start)
+        console.log(`last index: ${lastIndex}, violation.start: ${violation.start}`)
+        console.log(`pushing item "${item}" to elements`)
+        elements.push(item)
       }
 
       elements.push(
@@ -30,6 +33,10 @@ const ComplianceReview = ({
     })
 
     if (lastIndex < paragraph.length){
+      console.log(`lastindex: ${lastIndex}`)
+      console.log(`paragraph.length: ${paragraph.length}`)
+      const item = paragraph.slice(lastIndex)
+      console.log(`pushing item "${item}" to elements`)
       elements.push(paragraph.slice(lastIndex))
     }
 
@@ -39,8 +46,7 @@ const ComplianceReview = ({
 
   return (
     <>
-      <p>{renderTextWIthViolations()}</p>
-      <p>{paragraph}</p>
+      <p>{renderTextWithViolations()}</p>
     </>
   );
 };

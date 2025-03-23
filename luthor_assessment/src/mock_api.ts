@@ -7,8 +7,8 @@ export const fetchViolations = (): Promise<Array<ViolationData>> => {
           {
             id: "v1",
             text: "guarantees consistent returns of up to 20% annually",
-            start: 102,
-            end: 153,
+            start: 113,
+            end: 164,
             length: 51,
             type: "Guaranteed Returns",
             message: "Avoid implying guaranteed or predictable returns.",
@@ -17,9 +17,9 @@ export const fetchViolations = (): Promise<Array<ViolationData>> => {
           {
             id: "v2",
             text: "beat the market and build generational wealth",
-            start: 180,
-            end: 226,
-            length: 46,
+            start: 201,
+            end: 246,
+            length: 45,
             type: "Promissory Language",
             message: "Avoid promising outperformance or guaranteed success.",
             severity: "medium"
@@ -27,8 +27,8 @@ export const fetchViolations = (): Promise<Array<ViolationData>> => {
           {
             id: "v3",
             text: "make you our next success story",
-            start: 260,
-            end: 292,
+            start: 284,
+            end: 316,
             length: 32,
             type: "Testimonials",
             message: "Avoid vague success testimonials without disclosures.",
