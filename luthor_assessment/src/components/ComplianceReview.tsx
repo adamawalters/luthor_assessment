@@ -1,16 +1,18 @@
-import { ViolationData } from "../types";
+import { SuggestionData, ViolationData } from "../types";
 import Violation from "./Violation";
 
 interface ComplianceReviewProps {
   paragraph: string;
   violations: Array<ViolationData>;
-  onViolationClick: () => void;
+  onViolationClick: (violation: ViolationData) => void;
+  suggestions: SuggestionData
 }
 
 const ComplianceReview = ({
   paragraph,
   violations,
   onViolationClick,
+  suggestions
 }: ComplianceReviewProps) => {
 
   const renderTextWithViolations = () => {
@@ -20,24 +22,19 @@ const ComplianceReview = ({
     violations.forEach((violation, index) => {
       if(violation.start > lastIndex) {
         const item = paragraph.slice(lastIndex, violation.start)
-        console.log(`last index: ${lastIndex}, violation.start: ${violation.start}`)
-        console.log(`pushing item "${item}" to elements`)
         elements.push(item)
       }
 
       elements.push(
-        <Violation key={index} violation={violation} onClick={onViolationClick} />
+        <Violation key={index} violation={violation} onClick={onViolationClick} suggestions={suggestions} />
       )
 
       lastIndex = violation.end
     })
 
     if (lastIndex < paragraph.length){
-      console.log(`lastindex: ${lastIndex}`)
-      console.log(`paragraph.length: ${paragraph.length}`)
       const item = paragraph.slice(lastIndex)
-      console.log(`pushing item "${item}" to elements`)
-      elements.push(paragraph.slice(lastIndex))
+      elements.push(item)
     }
 
     return elements

@@ -10,5 +10,5 @@ export type ViolationData = {
 }
 
 export type SuggestionData = {
-    string: Array<string>
+    [key: string]: Array<string>
 }
