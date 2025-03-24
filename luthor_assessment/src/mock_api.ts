@@ -1,17 +1,9 @@
 import { ViolationData, SuggestionData } from "./types";
 
-export const fetchViolations = (paragraph: string, mockViolations: boolean): Promise<Array<ViolationData>> => {
-  
-  // If mock_violations is false, return no violations
-  if (!mockViolations) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([])
-      }, 500);
-    })
-  }
-  
-  // Return hardcoded violations
+  // Return hardcoded violations or suggestions
+
+
+export const fetchViolations = (paragraph: string): Promise<Array<ViolationData>> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -38,7 +30,7 @@ export const fetchViolations = (paragraph: string, mockViolations: boolean): Pro
         {
           id: "v3",
           text: "make you our next success story",
-          start: 284,
+          start: 285,
           end: 316,
           length: 32,
           type: "Testimonials",
@@ -57,19 +49,19 @@ export const fetchSuggestions = (
     setTimeout(() => {
       resolve({
         "v1": [
-         "Has historically delivered returns of up to 20% annually, though past performance is not indicative of future results.",
-         "aims to achieve strong annual returns, with some investors seeing gains as high as 20% in certain years.",
-         "Leverages advanced modeling to pursue returns that, in past performance, have reached up to 20% annually."
+         "has historically delivered returns of up to 20% annually, though past performance is not indicative of future results",
+         "aims to achieve strong annual returns, with some investors seeing gains as high as 20% in certain years",
+         "leverages advanced modeling to pursue returns that, in past performance, have reached up to 20% annually"
        ],
       "v2": [
          "strive for long-term growth and financial resilience",
-         "Help investors pursue their financial goals with confidence",
+         "pursue their financial goals with confidence",
          "support informed investing strategies aimed at building lasting value"
        ],
        "v3": [
-         "Discuss how our approach might align with your financial goals",
-         "Explore whether our strategy is a good fit for your needs",
-         "See how our methodology could support your investment journey"
+         "discuss how our approach might align with your financial goals",
+         "explore whether our strategy is a good fit for your needs",
+         "see how our methodology could support your investment journey"
        ]
      }
      );

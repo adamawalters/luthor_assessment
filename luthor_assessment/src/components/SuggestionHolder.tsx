@@ -1,4 +1,4 @@
-import { Typography, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Button } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from "@mui/material";
 import { ViolationData } from "../types";
 
 interface SuggestionHolderProps {

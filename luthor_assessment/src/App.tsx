@@ -4,7 +4,7 @@ import defaultText from "./default_text.txt";
 import ComplianceReview from "./components/ComplianceReview";
 import * as mock_api from "./mock_api";
 import { SuggestionData, ViolationData } from "./types";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Button, Paper, TextField, Typography } from "@mui/material";
 
 function App() {
   const [paragraph, setParagraph] = useState(defaultText);
@@ -12,11 +12,25 @@ function App() {
   const [violations, setViolations] = useState(Array<ViolationData>);
   const [suggestions, setSuggestions] = useState<null | SuggestionData>(null);
 
+
+  useEffect(() => {
+    const loadText = async () => {
+      try {
+        const response = await fetch(defaultText);
+        const text = await response.text();
+        setParagraph(text);
+        setEditedParagraph(text);
+      } catch (error) {
+        console.error(`Error fetching default text: ${error}`);
+      }
+    };
+    loadText();
+  }, []);
+
   const loadViolations = useCallback(
-    async (paragraph: string, mockViolations: boolean) => {
+    async (paragraph: string) => {
       const fetchedViolations = await mock_api.fetchViolations(
         paragraph,
-        mockViolations
       );
       setViolations(fetchedViolations);
     },
@@ -34,19 +48,7 @@ function App() {
     }
   }, [violations]);
 
-  useEffect(() => {
-    const loadText = async () => {
-      try {
-        const response = await fetch(defaultText);
-        const text = await response.text();
-        setParagraph(text);
-        setEditedParagraph(text);
-      } catch (error) {
-        console.error(`Error fetching default text: ${error}`);
-      }
-    };
-    loadText();
-  }, []);
+
 
   const handleApplySuggestion = (violationId: string, newText: string) => {
     const violation = violations.find((v) => v.id === violationId);
@@ -71,8 +73,7 @@ function App() {
             : v.end,
       }));
 
-    setParagraph(updatedParagraph);
-    setEditedParagraph(updatedParagraph);
+    setParagraph(updatedParagraph)
     setViolations(updatedViolations);
   };
 
@@ -83,54 +84,74 @@ function App() {
 
   const handleSubmit = () => {
     setParagraph(editedParagraph);
-    loadViolations(editedParagraph, true);
+    loadViolations(editedParagraph);
   };
 
   return (
     <main className="app-container">
-        <section className="text-entry-section">
-          <Typography variant="h5" className="instruction" fontWeight="fontWeightMedium">
-              Please enter your text below. After you click "Submit", the tool will
-              parse it for violations.{" "}
-          </Typography>
-          <div>
-            <TextField
-              value={editedParagraph}
-              multiline
-              fullWidth
-              slotProps={{
-                input: {
-                  readOnly: true,
-                },
-              }}
-            />
-            <Button
-              sx={{ marginTop: "10px" }}
-              variant="contained"
-              onClick={handleSubmit}
-              fullWidth
-            >
-              Submit Text
-            </Button>
+      <Paper elevation={4} className="text-entry-section">
+        <Typography
+          variant="h5"
+          className="instruction"
+          fontWeight="fontWeightMedium"
+        >
+          Please enter your text below. After you click "Submit", the tool will
+          parse it for violations{" "}
+        </Typography>
+        <div>
+          <div className="explanation">
+            This text box is read-only for the purposes of this assessment
           </div>
-        </section>
-          {suggestions && violations ? (
-            <section className="violation-section">
-              <Typography className="instruction" variant="h5">Compliance Review</Typography>
-              <Typography>
-                We found <span className="bold">{violations.length} violation(s)</span>. Please review the
-                highlighted text below and <span className="bold"> edit violations by clicking on them.</span> You can choose a suggestion,
-                dismiss the violation, or update the text manually.{" "}
-              </Typography>
-              <ComplianceReview
-                paragraph={paragraph}
-                violations={violations}
-                suggestions={suggestions}
-                handleApplySuggestion={handleApplySuggestion}
-                handleDismissViolation={handleDismissViolation}
-              />
-            </section>
-          ) : null}
+          <TextField
+            value={editedParagraph}
+            multiline
+            fullWidth
+            variant="filled"
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
+            }}
+          />
+          <Button
+            sx={{ marginTop: "10px" }}
+            variant="contained"
+            onClick={handleSubmit}
+            fullWidth
+          >
+            Submit Text
+          </Button>
+        </div>
+      </Paper>
+      {suggestions && violations ? (
+        <Paper elevation={4} className="violation-section">
+          <Typography className="instruction" variant="h5">
+            Compliance Review
+          </Typography>
+          {violations.length ? (
+            <Typography>
+              We found{" "}
+              <span className="bold">{violations.length} violation(s)</span>.
+              Please review the highlighted text below and{" "}
+              <span className="bold">
+                {" "}
+                edit violations by clicking on them.
+              </span>{" "}
+              You can choose a suggestion, dismiss the violation, or update the
+              text manually.{" "}
+            </Typography>
+          ) : (
+            <Typography> We found <span className="bold validation-success">no violations</span>! Please send the reviewed text below to compliance for a final review.</Typography>
+          )}
+          <ComplianceReview
+            paragraph={paragraph}
+            violations={violations}
+            suggestions={suggestions}
+            handleApplySuggestion={handleApplySuggestion}
+            handleDismissViolation={handleDismissViolation}
+          />
+        </Paper>
+      ) : null}
     </main>
   );
 }

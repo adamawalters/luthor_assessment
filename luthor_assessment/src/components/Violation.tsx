@@ -25,7 +25,7 @@ const Violation = ({
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
-    setNewText("")
+    setNewText("");
   };
 
   useEffect(() => {
@@ -40,9 +40,9 @@ const Violation = ({
 
   const handleNewTextSubmission = (e: FormEvent) => {
     e.preventDefault();
-    handleApplySuggestion(violation.id, newText)
-    handleClose()
-  }
+    handleApplySuggestion(violation.id, newText);
+    handleClose();
+  };
 
   return (
     <>
@@ -72,21 +72,30 @@ const Violation = ({
           <Box>
             <h4>Add new text:</h4>
             <form onSubmit={handleNewTextSubmission}>
-                <div className="new-text-row">
-                  <TextField
-                    className="new-text-field"
-                    id="outlined-basic"
-                    variant="outlined"
-                    placeholder="Add new text"
-                    value={newText}
-                    required
-                    onChange={(e) => setNewText(e.target.value)}
-                  />
-                  <Button type="submit">Submit new text</Button>
-                </div>
+              <div className="new-text-row">
+                <TextField
+                  className="new-text-field"
+                  id="outlined-basic"
+                  variant="outlined"
+                  placeholder="Add new text"
+                  value={newText}
+                  required
+                  onChange={(e) => setNewText(e.target.value)}
+                />
+                <Button variant="contained" type="submit">
+                  Submit new text
+                </Button>
+              </div>
             </form>
           </Box>
-          <Button onClick={() => handleDismissViolation(violation.id)}>
+          <Button
+            sx={{ marginTop: "20px", backgroundColor: "red" }}
+            variant="contained"
+            onClick={() => {
+              handleClose();
+              handleDismissViolation(violation.id);
+            }}
+          >
             Dismiss Violation
           </Button>
         </Typography>

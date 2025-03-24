@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { SuggestionData, ViolationData } from "../types";
 import Violation from "./Violation";
 
@@ -48,9 +49,9 @@ const ComplianceReview = ({
   };
 
   return (
-    <>
-      <p>{renderTextWithViolations()}</p>
-    </>
+      <div className="violation-container">
+        <Typography>{renderTextWithViolations()}</Typography>
+        </div>
   );
 };
 
