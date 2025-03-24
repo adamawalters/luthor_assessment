@@ -146,7 +146,7 @@ function App() {
                 {" "}
                 We found{" "}
                 <span className="bold validation-success">no violations</span>!
-                Please send the reviewed text below to compliance for a final
+                Please copy the reviewed text below and send it to compliance for a final
                 review.
               </Typography>
             )}
