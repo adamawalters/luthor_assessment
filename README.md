@@ -6,7 +6,8 @@ A tool that accepts text provided by the client, sends it to the API, and presen
 ## Installation
 ```sh
 git clone https://github.com/adamawalters/luthor_assessment.git
-cd luthor_assessments
+cd luthor_assessment
+cd luthor_assessment
 npm install
 npm run dev
 ```
