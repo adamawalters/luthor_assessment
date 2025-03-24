@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import defaultText from "./utils/default_text.txt";
 import ComplianceReview from "./components/ComplianceReview";
-import * as mock_api from "./utils/mock_api";
+import * as mock_api from "./utils/mock_api.ts";
 import { SuggestionData, ViolationData } from "./utils/types";
 import { Button, Paper, TextField, Typography } from "@mui/material";
 import { ViolationContext } from "./utils/context";
