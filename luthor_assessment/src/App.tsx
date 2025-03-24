@@ -9,7 +9,7 @@ import { ViolationContext } from "./utils/context";
 
 function App() {
   const [paragraph, setParagraph] = useState(defaultText);
-  const [editedParagraph, setEditedParagraph] = useState("");
+  const [editableParagraph, setEditableParagraph] = useState("");
   const [violations, setViolations] = useState(Array<ViolationData>);
   const [suggestions, setSuggestions] = useState<null | SuggestionData>(null);
 
@@ -19,7 +19,7 @@ function App() {
         const response = await fetch(defaultText);
         const text = await response.text();
         setParagraph(text);
-        setEditedParagraph(text);
+        setEditableParagraph(text);
       } catch (error) {
         console.error(`Error fetching default text: ${error}`);
       }
@@ -43,6 +43,7 @@ function App() {
     }
   }, [violations]);
 
+  /* Also used to apply free text changes */
   const handleApplySuggestion = (violationId: string, newText: string) => {
     const violation = violations.find((v) => v.id === violationId);
     if (!violation) return;
@@ -68,6 +69,9 @@ function App() {
 
     setParagraph(updatedParagraph);
     setViolations(updatedViolations);
+    /* Ideally in the case of a free text change the updated paragraph would be sent to API again and we would check for new violations,  but not in this mocked scenario 
+      It would be loadViolations(updatedParagraph)
+    */
   };
 
   const handleDismissViolation = (violationId: string) => {
@@ -75,9 +79,10 @@ function App() {
     setViolations(updatedViolations);
   };
 
+  /* This resets the compliance review text to the initial text. In a real scenario this would be used if the user wanted to check a new or edited paragraph */
   const handleSubmit = () => {
-    setParagraph(editedParagraph);
-    loadViolations(editedParagraph);
+    setParagraph(editableParagraph);
+    loadViolations(editableParagraph);
   };
 
   return (
@@ -96,7 +101,7 @@ function App() {
             This text box is read-only for the purposes of this assessment
           </div>
           <TextField
-            value={editedParagraph}
+            value={editableParagraph}
             multiline
             fullWidth
             variant="filled"

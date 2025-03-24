@@ -52,20 +52,20 @@ const Violation = ({ violation }: ViolationProps) => {
           </p>
           <SuggestionHolder handleClose={handleClose} violation={violation} />
           <Box>
-            <h4>Add new text:</h4>
+            <h4>Add free text change:</h4>
             <form onSubmit={handleNewTextSubmission}>
               <div className="new-text-row">
                 <TextField
                   className="new-text-field"
                   id="outlined-basic"
                   variant="outlined"
-                  placeholder="Add new text"
+                  placeholder="Add free text change"
                   value={newText}
                   required
                   onChange={(e) => setNewText(e.target.value)}
                 />
                 <Button variant="contained" type="submit">
-                  Submit new text
+                  Submit free text change
                 </Button>
               </div>
             </form>
