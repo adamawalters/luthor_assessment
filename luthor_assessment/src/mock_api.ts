@@ -1,6 +1,17 @@
 import { ViolationData, SuggestionData } from "./types";
 
-export const fetchViolations = (): Promise<Array<ViolationData>> => {
+export const fetchViolations = (paragraph: string, mockViolations: boolean): Promise<Array<ViolationData>> => {
+  
+  // If mock_violations is false, return no violations
+  if (!mockViolations) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve([])
+      }, 500);
+    })
+  }
+  
+  // Return hardcoded violations
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
