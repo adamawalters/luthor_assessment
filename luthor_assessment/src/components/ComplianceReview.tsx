@@ -1,22 +1,13 @@
 import { Typography } from "@mui/material";
-import { SuggestionData, ViolationData } from "../types";
+import { ViolationData } from "../utils/types";
 import Violation from "./Violation";
 
 interface ComplianceReviewProps {
   paragraph: string;
   violations: Array<ViolationData>;
-  suggestions: SuggestionData;
-  handleApplySuggestion: (violationId: string, newText: string) => void;
-  handleDismissViolation: (violationId: string) => void;
 }
 
-const ComplianceReview = ({
-  paragraph,
-  violations,
-  suggestions,
-  handleApplySuggestion,
-  handleDismissViolation,
-}: ComplianceReviewProps) => {
+const ComplianceReview = ({ paragraph, violations }: ComplianceReviewProps) => {
   const renderTextWithViolations = () => {
     let lastIndex = 0;
     const elements = [];
@@ -27,15 +18,7 @@ const ComplianceReview = ({
         elements.push(item);
       }
 
-      elements.push(
-        <Violation
-          key={index}
-          violation={violation}
-          suggestions={suggestions}
-          handleApplySuggestion={handleApplySuggestion}
-          handleDismissViolation={handleDismissViolation}
-        />
-      );
+      elements.push(<Violation key={index} violation={violation} />);
 
       lastIndex = violation.end;
     });
@@ -49,9 +32,9 @@ const ComplianceReview = ({
   };
 
   return (
-      <div className="violation-container">
-        <Typography>{renderTextWithViolations()}</Typography>
-        </div>
+    <div className="violation-container">
+      <Typography>{renderTextWithViolations()}</Typography>
+    </div>
   );
 };
 

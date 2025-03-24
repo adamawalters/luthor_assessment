@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
-import defaultText from "./default_text.txt";
+import defaultText from "./utils/default_text.txt";
 import ComplianceReview from "./components/ComplianceReview";
-import * as mock_api from "./mock_api";
-import { SuggestionData, ViolationData } from "./types";
+import * as mock_api from "./utils/mock_api";
+import { SuggestionData, ViolationData } from "./utils/types";
 import { Button, Paper, TextField, Typography } from "@mui/material";
+import { ViolationContext } from "./utils/context";
 
 function App() {
   const [paragraph, setParagraph] = useState(defaultText);
   const [editedParagraph, setEditedParagraph] = useState("");
   const [violations, setViolations] = useState(Array<ViolationData>);
   const [suggestions, setSuggestions] = useState<null | SuggestionData>(null);
-
 
   useEffect(() => {
     const loadText = async () => {
@@ -27,15 +27,10 @@ function App() {
     loadText();
   }, []);
 
-  const loadViolations = useCallback(
-    async (paragraph: string) => {
-      const fetchedViolations = await mock_api.fetchViolations(
-        paragraph,
-      );
-      setViolations(fetchedViolations);
-    },
-    []
-  );
+  const loadViolations = useCallback(async (paragraph: string) => {
+    const fetchedViolations = await mock_api.fetchViolations(paragraph);
+    setViolations(fetchedViolations);
+  }, []);
 
   useEffect(() => {
     if (violations.length > 0) {
@@ -47,8 +42,6 @@ function App() {
       loadSuggestions();
     }
   }, [violations]);
-
-
 
   const handleApplySuggestion = (violationId: string, newText: string) => {
     const violation = violations.find((v) => v.id === violationId);
@@ -73,7 +66,7 @@ function App() {
             : v.end,
       }));
 
-    setParagraph(updatedParagraph)
+    setParagraph(updatedParagraph);
     setViolations(updatedViolations);
   };
 
@@ -124,33 +117,37 @@ function App() {
         </div>
       </Paper>
       {suggestions && violations ? (
-        <Paper elevation={4} className="violation-section">
-          <Typography className="instruction" variant="h5">
-            Compliance Review
-          </Typography>
-          {violations.length ? (
-            <Typography>
-              We found{" "}
-              <span className="bold">{violations.length} violation(s)</span>.
-              Please review the highlighted text below and{" "}
-              <span className="bold">
-                {" "}
-                edit violations by clicking on them.
-              </span>{" "}
-              You can choose a suggestion, dismiss the violation, or update the
-              text manually.{" "}
+        <ViolationContext.Provider
+          value={{ suggestions, handleApplySuggestion, handleDismissViolation }}
+        >
+          <Paper elevation={4} className="violation-section">
+            <Typography className="instruction" variant="h5">
+              Compliance Review
             </Typography>
-          ) : (
-            <Typography> We found <span className="bold validation-success">no violations</span>! Please send the reviewed text below to compliance for a final review.</Typography>
-          )}
-          <ComplianceReview
-            paragraph={paragraph}
-            violations={violations}
-            suggestions={suggestions}
-            handleApplySuggestion={handleApplySuggestion}
-            handleDismissViolation={handleDismissViolation}
-          />
-        </Paper>
+            {violations.length ? (
+              <Typography>
+                We found{" "}
+                <span className="bold">{violations.length} violation(s)</span>.
+                Please review the highlighted text below and{" "}
+                <span className="bold">
+                  {" "}
+                  edit violations by clicking on them.
+                </span>{" "}
+                You can choose a suggestion, dismiss the violation, or update
+                the text manually.{" "}
+              </Typography>
+            ) : (
+              <Typography>
+                {" "}
+                We found{" "}
+                <span className="bold validation-success">no violations</span>!
+                Please send the reviewed text below to compliance for a final
+                review.
+              </Typography>
+            )}
+            <ComplianceReview paragraph={paragraph} violations={violations} />
+          </Paper>
+        </ViolationContext.Provider>
       ) : null}
     </main>
   );
