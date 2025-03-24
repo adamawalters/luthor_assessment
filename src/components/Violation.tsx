@@ -45,6 +45,10 @@ const Violation = ({ violation }: ViolationProps) => {
             Violation: "
             <span className="violation-text">{violation.text}"</span>
           </p>
+          <p className="bold">
+            Message: "
+            {violation.message}"
+          </p>
           <p>
             {" "}
             Below, please choose one of the suggestions, enter your own text, or
