@@ -34,3 +34,27 @@
 .new-text-field {
     flex-grow: 1
 }
+
+#root {
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 66%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.instruction {
+    text-align: center;
+    font-weight: 900;
+    text-decoration: underline;
+}
+
+.text-entry-section, .violation-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

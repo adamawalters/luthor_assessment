@@ -4,6 +4,7 @@ import defaultText from "./default_text.txt";
 import ComplianceReview from "./components/ComplianceReview";
 import * as mock_api from "./mock_api";
 import { SuggestionData, ViolationData } from "./types";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 function App() {
   const [paragraph, setParagraph] = useState(defaultText);
@@ -47,10 +48,6 @@ function App() {
     loadText();
   }, []);
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditedParagraph(event.target.value);
-  };
-
   const handleApplySuggestion = (violationId: string, newText: string) => {
     const violation = violations.find((v) => v.id === violationId);
     if (!violation) return;
@@ -64,9 +61,15 @@ function App() {
       .filter((v) => v.id !== violationId)
       .map((v) => ({
         ...v,
-        start: v.start > violation.start ? v.start + (newText.length - violation.text.length) : v.start,
-        end: v.end > violation.start ? v.end + (newText.length - violation.text.length) : v.end,
-    }));
+        start:
+          v.start > violation.start
+            ? v.start + (newText.length - violation.text.length)
+            : v.start,
+        end:
+          v.end > violation.start
+            ? v.end + (newText.length - violation.text.length)
+            : v.end,
+      }));
 
     setParagraph(updatedParagraph);
     setEditedParagraph(updatedParagraph);
@@ -74,9 +77,9 @@ function App() {
   };
 
   const handleDismissViolation = (violationId: string) => {
-    const updatedViolations = violations.filter(v => v.id !== violationId)
-    setViolations(updatedViolations)
-  }
+    const updatedViolations = violations.filter((v) => v.id !== violationId);
+    setViolations(updatedViolations);
+  };
 
   const handleSubmit = () => {
     setParagraph(editedParagraph);
@@ -84,31 +87,51 @@ function App() {
   };
 
   return (
-    <>
-      <div>
-        Please enter your text below. After you click "Submit", the tool will
-        parse it for violations.{" "}
-      </div>
-      <textarea
-        value={editedParagraph}
-        onChange={handleTextChange}
-        rows={6}
-        cols={80}
-      />
-      <button onClick={handleSubmit}>Submit</button>
-      {suggestions && violations ? (
-        <>
-          <div>We found {violations.length} violation(s). Please review the highlighted text by clicking on it. You can choose a suggestion, dismiss the violation, or update the text manually. </div>
-          <ComplianceReview
-            paragraph={paragraph}
-            violations={violations}
-            suggestions={suggestions}
-            handleApplySuggestion={handleApplySuggestion}
-            handleDismissViolation={handleDismissViolation}
-          />
-        </>
-      ) : null}
-    </>
+    <main className="app-container">
+        <section className="text-entry-section">
+          <Typography variant="h5" className="instruction" fontWeight="fontWeightMedium">
+              Please enter your text below. After you click "Submit", the tool will
+              parse it for violations.{" "}
+          </Typography>
+          <div>
+            <TextField
+              value={editedParagraph}
+              multiline
+              fullWidth
+              slotProps={{
+                input: {
+                  readOnly: true,
+                },
+              }}
+            />
+            <Button
+              sx={{ marginTop: "10px" }}
+              variant="contained"
+              onClick={handleSubmit}
+              fullWidth
+            >
+              Submit Text
+            </Button>
+          </div>
+        </section>
+          {suggestions && violations ? (
+            <section className="violation-section">
+              <Typography className="instruction" variant="h5">Compliance Review</Typography>
+              <Typography>
+                We found <span className="bold">{violations.length} violation(s)</span>. Please review the
+                highlighted text below and <span className="bold"> edit violations by clicking on them.</span> You can choose a suggestion,
+                dismiss the violation, or update the text manually.{" "}
+              </Typography>
+              <ComplianceReview
+                paragraph={paragraph}
+                violations={violations}
+                suggestions={suggestions}
+                handleApplySuggestion={handleApplySuggestion}
+                handleDismissViolation={handleDismissViolation}
+              />
+            </section>
+          ) : null}
+    </main>
   );
 }
 
