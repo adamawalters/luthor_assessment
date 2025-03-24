@@ -10,7 +10,7 @@ import { ViolationContext } from "./utils/context";
 function App() {
   const [paragraph, setParagraph] = useState(defaultText);
   const [editableParagraph, setEditableParagraph] = useState("");
-  const [violations, setViolations] = useState(Array<ViolationData>);
+  const [violations, setViolations] = useState<Array<ViolationData>>([]);
   const [suggestions, setSuggestions] = useState<null | SuggestionData>(null);
 
   useEffect(() => {
